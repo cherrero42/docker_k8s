@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+RUN set -ex && apk update && apk add openssh-server lftp
+
+COPY sshd_config /etc/ssh/sshd_config
+COPY entrypoint_alpine.sh /entrypoint_alpine.sh
+
+RUN set -ex &&  chmod +x /entrypoint_alpine.sh && \
+    echo "root:root" | chpasswd
+
+WORKDIR /usr/src/
+
+EXPOSE 4141
+
+ENTRYPOINT ["/entrypoint_alpine.sh"]
