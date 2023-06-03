@@ -9,10 +9,10 @@ COPY requirements.txt /tmp/
 
 RUN set -x -e && pip3 install --requirement /tmp/requirements.txt && \
     chmod +x /ssh.sh && \
-    echo "root:root" | chpasswd
+    echo "root:xxxx" | chpasswd
 
 RUN useradd -m probe && \
-    echo "probe:123456" | chpasswd && \
+    echo "probe:123xxx" | chpasswd && \
     groupadd sshusers && \
     usermod -aG sshusers probe && \
     usermod -aG sudo probe
