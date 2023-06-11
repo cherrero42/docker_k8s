@@ -7,13 +7,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        IP_ADDRESS: ${IP_ADDRESS} 
     tty: true
     ports:
       - "4240:4141"
     # workdir: /root/bootcamp/iron_dome
     volumes:
-      - /BootCamp_Cyber/iron_dome/inter2/log:/var/log/irondome
-      - /BootCamp_Cyber/iron_dome/inter2/:/root/bootcamp/iron_dome:ro
+      - /BootCamp_Cyber/iron_dome/inter/log:/var/log/irondome
+      - /BootCamp_Cyber/iron_dome/inter/:/root/bootcamp/iron_dome:ro
     container_name: irondome5
 # networks:
 #   networkCDM:
