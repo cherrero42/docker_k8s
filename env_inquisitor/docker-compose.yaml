@@ -4,7 +4,7 @@ services:
  
     ftp_server:
         container_name: ftp_server
-        image: panubo/vsftpd:v1.0.0
+        image: panubo/vsftpd:1.0.0
         ports:
             - "21:21"
         environment:
@@ -50,7 +50,7 @@ services:
 
     user:
         container_name: user
-        image: jlesage/filezilla
+        image: jlesage/filezilla:23.06.1
         ports:
             - "5800:5800"
         networks:
