@@ -1,4 +1,4 @@
-FROM ubuntu:latest   
+FROM ubuntu:22.04   
 
 RUN set -x -e && apt-get update && \
     apt-get install openssh-server -y && apt-get install vim sudo python3 pip libmagic1 -y
@@ -18,5 +18,7 @@ RUN useradd -m probe && \
     usermod -aG sudo probe
 
 EXPOSE 4141
+
+USER 1001
 
 CMD ["sh", "/ssh.sh"]
