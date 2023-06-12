@@ -10,6 +10,8 @@ services:
       args:
         IP_ADDRESS: ${IP_ADDRESS} 
     tty: true
+    env_file:
+      - .env
     ports:
       - "4240:4141"
     # workdir: /root/bootcamp/iron_dome
@@ -20,3 +22,5 @@ services:
 # networks:
 #   networkCDM:
 #     driver: bridge
+
+project_name: iron_dome
