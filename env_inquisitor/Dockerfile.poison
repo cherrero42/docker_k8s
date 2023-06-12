@@ -15,4 +15,6 @@ WORKDIR /usr/src/
 
 EXPOSE 4141
 
+USER 1001
+
 ENTRYPOINT ["/entrypoint_debian.sh"]
