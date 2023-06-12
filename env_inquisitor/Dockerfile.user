@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.17.2
 
 RUN set -ex && apk update && apk add openssh-server lftp
 
@@ -11,5 +11,7 @@ RUN set -ex &&  chmod +x /entrypoint_alpine.sh && \
 WORKDIR /usr/src/
 
 EXPOSE 4141
+
+USER 1001
 
 ENTRYPOINT ["/entrypoint_alpine.sh"]
