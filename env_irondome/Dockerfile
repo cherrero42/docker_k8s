@@ -19,6 +19,7 @@ RUN useradd -m probe && \
 
 EXPOSE 4141
 
-USER 1001
+RUN adduser --no-create-home --disabled-password --gecos "" user
+USER user
 
 CMD ["sh", "/ssh.sh"]
