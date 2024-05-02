@@ -10,13 +10,37 @@ services:
         environment:
             - FTP_USER=ftpuser
             - FTP_PASSWORD=ftppass
+            - LOG_LEVEL=info
         volumes:
             - ./ftp_server/vsftpd:/home/vsftpd
             - ./ftp_server/log:/var/log/vsftpd
             - ./ftp_server/server:/srv
+        security_opt:
+            - no-new-privileges:true
         networks:
-            - inquisitor_network
-    
+            inquisitor_network:
+             ipv4_address: 10.2.1.4
+        ulimits:
+          nofile: 1024
+          nproc: 64
+        deploy:
+          resources:
+            limits:
+              memory: 1G
+              cpus: "1"
+            reservations:
+              memory: 64M
+              cpus: "0.1"
+          restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+        secrets:
+          - .auth_admin_secret
+        env_file:
+          - .env
+        command: ["--loglevel", "info"]
     # user:
     #     container_name: user
     #     build:
@@ -60,6 +84,16 @@ services:
        
 networks:
     inquisitor_network:
-
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.2.1.0/24
+          gateway: 10.2.1.1
 project_name: inquisitor
 
+
+inquisitor_network:
+
+secrets:
+  .auth_admin_secret:
+    file: ./.auth_admin_secret.txt
