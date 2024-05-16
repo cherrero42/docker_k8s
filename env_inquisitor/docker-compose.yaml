@@ -36,6 +36,8 @@ services:
             delay: 5s
             max_attempts: 3
             window: 120s
+        security_opt:
+          - no-new-privileges:true
         secrets:
           - .auth_admin_secret
         env_file:
