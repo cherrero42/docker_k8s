@@ -1,0 +1,51 @@
+# v1.01 22/11/24
+
+version: '3'
+
+services:
+  nagios:
+
+    build:
+      context: .
+      dockerfile: Dockerfile.nagios
+    container_name: nagios
+    ports:
+      - "7072:80"
+    volumes:
+      - ${host_folder_config}/storage/config:/opt/nagios/etc      # Config Volume
+      - ${host_folder}/storage/data:/opt/nagios/var               # Data Volume (logs, etc.)
+      - ${host_folder}/storage/plugins:/opt/nagios/plugins        # Plugins Volume
+    networks:
+      nagios:
+        ipv4_address: 10.2.2.4
+    ulimits:
+      nofile: 1024
+      nproc: 640
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1"
+        reservations:
+          memory: 64M
+          cpus: "0.1"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    secrets:
+      - .auth_secret
+
+secrets:
+  .auth_secret:
+    file: .auth_secret
+
+networks:
+  nagios:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.2.2.0/24
+          gateway: 10.2.2.1
+

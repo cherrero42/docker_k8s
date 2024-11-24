@@ -1,0 +1,24 @@
+# 02/09/24 v4.4.14 -> 4.5.2
+
+FROM jasonrivers/nagios:4.5.2
+LABEL version=jasonrivers-4.5.2
+
+RUN set -ex && apt update && apt upgrade -y && \
+sed -i 's/relayhost =/relayhost = [smtp.office365.com]:587/' /etc/postfix/main.cf && \
+echo "smtp_use_tls = yes" >> /etc/postfix/main.cf && \
+echo "smtp_sasl_auth_enable = yes" >> /etc/postfix/main.cf && \
+echo "smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" >> /etc/postfix/main.cf && \
+echo "smtp_sasl_security_options = noanonymous" >> /etc/postfix/main.cf && \
+echo "smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt" >> /etc/postfix/main.cf && \
+echo "[smtp.office365.com]:587 username:passwd" >> /etc/postfix/sasl_passwd && \
+chmod 600 /etc/postfix/sasl_passwd && \
+postmap /etc/postfix/sasl_passwd && \
+chmod 600 /etc/postfix/sasl_passwd.db && \
+
+sed -i '10 a\SetEnv TZ \"Europe/Madrid\"' /etc/apache2/sites-enabled/nagios.conf
+
+USER nagios
+
+EXPOSE 7072
+
+# ENTRYPOINT ["nagios", "check_nagios"]
